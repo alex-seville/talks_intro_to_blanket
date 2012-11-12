@@ -120,11 +120,19 @@
 								<li>Executable written in Java. </li>
 								<li>Need to run a command to instrument files</li>
 								<li>Creates wrapper for test runner (<a target="_blank" href="http://siliconforks.com/jscoverage/instrumented-jquery/jscoverage.html?test/index.html">in browser</a>)</li>
-								<li>node-jscoverage needs to be compiled with make</li>
+								<li>node-jscoverage needs to be compiled with make, and need to change source files</li>
 							</ul> 
 						</p>
 					</section>
-					<section>
+	<section>
+						<h2>node-jscoverage setup</h2>
+					<pre><code contenteditable>module.exports = process.env.EXPRESS_COV
+   ? require('./lib-cov/express')
+   : require('./lib/express');</pre></code>
+<a target="_blank" href="http://tjholowaychuk.com/post/18175682663/mocha-test-coverage">-Mocha Test Coverage.</a>
+
+					</section>
+<section>
 						<h2>JSTestDriver</h2>
 						<p>
 							<ul>
