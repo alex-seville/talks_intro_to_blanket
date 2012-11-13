@@ -375,12 +375,55 @@ var checkForOneLiner = function (node) {
 				</section>
 
 				<section>
-					<h2>Demo</h2>
-					<p>
-						This example can be seen on the <a target="_blank" href="http://migrii.github.com/blanket/">Blanket.js website</a>.  
+					<section>
+						<h2>Demo</h2>
+						<p>
+							This example can be seen on the <a target="_blank" href="http://migrii.github.com/blanket/">Blanket.js website</a>.  
 
-						We took the unit tests for Addy Osmani's Backbone Koans and added Blanket.js to the testrunner.
-					</p>
+							We took the unit tests for Addy Osmani's Backbone Koans and added Blanket.js to the testrunner.
+						</p>
+					</section>
+					<section>
+						<h2>Existing Backbone Koans Test Runner</h2>
+						<pre><code contenteditable>
+&lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
+...
+&lt;script src="js/koans/aboutEvents.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutModels.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutCollections.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutViews.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutApps.js"&gt;&lt;/script&gt;
+...
+&lt;/head&gt;&lt;body&gt;
+  &lt;h1&gt;Backbone Koans&lt;/h1&gt;
+  &lt;h1 id="qunit-header"&gt;QUnit Test Suite&lt;/h1&gt; 
+  ...</code></pre>
+					</section>
+					<section>
+						<h2>Backbone Koans Test Runner with Blanket.js</h2>
+						<pre><code contenteditable>
+&lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
+<b>&lt;script src="blanket.js"&gt;&lt;/script&gt;</b>
+...
+&lt;script src="js/koans/aboutEvents.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutModels.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutCollections.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutViews.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutApps.js" <b>data-cover</b>&gt;&lt;/script&gt;
+...
+&lt;/head&gt;&lt;body&gt;
+  &lt;h1&gt;Backbone Koans&lt;/h1&gt;
+  &lt;h1 id="qunit-header"&gt;QUnit Test Suite&lt;/h1&gt; 
+  ...</code></pre>
+					</section>
+					<section>
+						<h2>Just show the demo already!</h2>
+						<p>
+							Ok, here it is: <a target="_blank" href="http://migrii.github.com/blanket/examples/backbone-koans-qunit/index.html">Blanket.js Demo</a>.  
+
+							
+						</p>
+					</section>
 				</section>
 
 				<section>
@@ -388,6 +431,7 @@ var checkForOneLiner = function (node) {
 					<ul>
 						<li>Tests, tests, tests, need to eat more of our own dogfood</li>
 						<li>Jasmine compatibility and API for other test runners</li>
+						<li>Integration with CI</li>
 						<li>Running with the jQuery test suite</li>
 						<li>Becoming the "official" code coverage tool of jQuery???</li>
 					</ul>
