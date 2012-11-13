@@ -50,6 +50,14 @@
 						<li>Travel Enthusiast</li>
 					</ul>
 				</section>
+				<section>
+					<h2>Disclaimer</h2>
+					<p>
+					Blanket.js is NOT production ready.  
+It is beyond the proof-of-concept stage, but is still NOT stable.  Use at your own risk.
+					</p>
+
+				</section>
 
 				<section>
 					<h2>What we'll cover</h2>
@@ -422,6 +430,21 @@ var checkForOneLiner = function (node) {
 							Ok, here it is: <a target="_blank" href="http://migrii.github.com/blanket/examples/backbone-koans-qunit/index.html">Blanket.js Demo</a>.  
 
 							
+						</p>
+					</section>
+					<section>
+						<h2>What about the Node Demo!?</h2>
+						<p>
+						I don't have one prepared yet, but this is what you need to do to run it with Node.
+						<ul>
+							<li>npm install blanket</li>
+							<li>Add the following code to the test runner:
+								<pre><code contenteditable>require("blanket")("/src/");</code></pre>
+							</li>
+							<li>Run mocha as usual:
+								<pre><code contenteditable>mocha -R html-cov > coverage.html</code></pre>
+							</li>
+						</ul>
 						</p>
 					</section>
 				</section>
