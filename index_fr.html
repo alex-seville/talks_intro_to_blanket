@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>blanket.js - Seamless JavaScript code coverage</title>
+
+		<meta name="description" content="A talk on Blanket.js">
+		<meta name="author" content="Alex Seville">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>Blanket.js</h1>
+					<h3>Seamless JavaScript Code Coverage</h3>
+					<p>
+						<small>Un projet open-source de <a href="http://migrii.com">Migrii</a> / <a target="_blank" href="http://twitter.com/alex_seville">@alex_seville</a>, <a target="_blank" href="http://twitter.com/dervalp">@dervalp</a>, <a  target="_blank" href="http://twitter.com/flrent">@flrent</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Qui suis-je?</h2>
+					<ul>
+						<li>Developeur a Nurun</li>
+						<li>Co-Fondateur de Migrii</li>
+						
+					</ul>
+				</section>
+				<section>
+					<h2>Attention</h2>
+					<p>
+					Blanket.js n'est PAS pret pour production.<br>  
+On est bien avance, mais ce n'est PAS stable a ce moment.<br>  Utiliser a votre proper risque.
+					</p>
+
+				</section>
+
+				<section>
+					<h2>What we'll cover</h2>
+					<p>
+						<ul>
+							<li>C'est quoi code coverage, et pourquoi est t'il important?</li>
+							
+							<li>Les approches existantes pour frontend code coverage</li>
+							<li>L'approche de Blanket.js</li>
+							<li>Demo de Blanket.js!</li>
+							<li>Travis-CI et Blanket.js</li>
+							<li>Le future de Blanket.js</li>
+						</ul>
+					</p>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Code Coverage</h2>
+						<p>
+							Code coverage est une forme de test destiné à identifier les zones de code qui n'ont pas été couverts par tes tests unitaires.
+						</p>
+
+						
+					</section>
+
+					<section>
+						<h2>Code Coverage</h2>
+						<p>
+							Voici un exemple de NUnit:
+							<br>
+							<img src="img/dotcover.png"/>
+						</p>
+
+					</section>
+					<section>
+						<h2>Code Coverage</h2>
+						<blockquote>NCover.Reporting.exe ... let you specify a minimum acceptable coverage for your project or for any part of it. If an element's coverage is below that minimum acceptable coverage percentage, NCover.Reporting.exe will ... make your build fail.
+							</blockquote>
+							<a target="_blank" href="http://www.ncover.com/support/docs/v3/how-to/fail-your-build-based-on-code-coverage-metrics/">-NCover V3 Docs.</a>
+								
+					</section>
+					<section>
+						<h2>Code Coverage</h2>
+						<ul>
+						<li>Une mesure quantitative pour juger des tests</li>
+						<li>Est-il vraiment prêt pour la production?</li>
+						</ul>
+					</section>
+				</section>
+
+				
+
+				<section>
+					<section>
+						<h2>Les approches existantes</h2>
+						<p>
+							<ul>
+								<li>JSCoverage, node-jscoverage, JSCover</li>
+								<li>JSTestDriver</li>
+								<li>Yahoo/Istanbul</li>
+							<ul>
+						</p>
+					</section>
+					<section>
+						<h2>JSCoverage, node-jscoverage, JSCover</h2>
+						<p>
+							<ul>
+								<li>Exécutable écrit en Java. </li>
+								<li>Besoin d'exécuter une commande pour 'instrumenter' les fichiers</li>
+								<li>Crée un wrapper pour ton test runner (<a target="_blank" href="http://siliconforks.com/jscoverage/instrumented-jquery/jscoverage.html?test/index.html">in browser</a>)</li>
+								<li>node-jscoverage doit être compilé avec make, et tu as besoin de modifier les fichiers de tests</li>
+							</ul> 
+						</p>
+					</section>
+	<section>
+						<h2>node-jscoverage setup</h2>
+					<pre><code contenteditable>module.exports = process.env.EXPRESS_COV
+   ? require('./lib-cov/express')
+   : require('./lib/express');</pre></code>
+<a target="_blank" href="http://tjholowaychuk.com/post/18175682663/mocha-test-coverage">-Mocha Test Coverage.</a>
+
+					</section>
+<section>
+						<h2>JSTestDriver</h2>
+						<p>
+							<ul>
+								<li>Also runs using Java. </li>
+								<li>Is based on JUnit, so you need to use an adapter for QUnit </li>
+								<li>Works as a server, but no asynchronous tests</li>
+								<li>A lot of setup and configuration</li>
+								<li>More of a test farm solution, then a development tool</li>
+							</ul> 
+						</p>
+					</section>
+					<section>
+						<h2>Yahoo/Istanbul</h2>
+						<p>
+							<ul>
+								<li>100% JavaScript!</li>
+								<li>Still creates instrumented files</li>
+								<li>No way of instrumenting files in the browser</li>
+							</ul> 
+						</p>
+						
+					</section>
+					<section>
+						<h2>Yahoo/Istanbul</h2>
+						<blockquote>
+							<b>Usage in a browser</b><br>
+
+							Load esprima.js, escodegen.js and instrumenter.js (this file) using script tags or other means.
+							
+							<br>...<br>
+
+							Aside from demonstration purposes, it is unclear why you would want to instrument code in a browser.
+						</blockquote>
+						<a target="_blank" href="http://gotwarlost.github.com/istanbul/public/apidocs/classes/Instrumenter.html">-Instanbul API Docs.</a>
+					</section>
+				</section>
+
+				<section>
+					<h2>Blanket Approach</h2>
+					<ul>
+						<li>Easy to install</li>
+						<li>Easy to use</li>
+						<li>Easy to understand</li>
+						<li>100% JavaScript</li>
+					</ul>
+				</section>
+				<section>
+						<h2>Mechanism</h2>
+						<ul>
+							<li>Load source files</li>
+							<li>Parse them</li>
+							<li>Instrument them</li>
+							<li>Output coverage details</li>
+						</ul>
+					</section>
+				<section>
+					
+					<section>
+						<h2>Load source files</h2>
+						<p>
+								In the browser, we bundle a copy of requirejs and use a modified version of requirejs.load.  We load the script file and pass the raw source to our instrumenting function.
+							
+							
+						</p>
+					</section>
+					<section>
+							<h2>Custom requirejs loader</h2>
+							<pre><code contenteditable>
+requirejs.load = function (context, moduleName, url) {
+ ...
+ requirejs.cget(url, function (content) {
+   blanket.instrument({
+     inputFile: content,
+     inputFileName: url
+   },function(instrumented){	
+	   blanketEval(instrumented);
+	    context.completeLoad(moduleName);
+     }
+   });
+ });
+};</code></pre>
+					</section>
+					<section>
+						<h2>Load source files</h2>
+						<p>
+								In NodeJS, we use require.extensions['.js'] to instrument all the source files as they are processed.
+							
+						</p>
+					</section>
+					<section>
+							<h2>Custom Node Require loader</h2>
+							<pre><code contenteditable>
+require.extensions['.js'] = function(module, filename) {
+  if (filename.indexOf(subdir) > -1){
+    var content = fs.readFileSync(filename, 'utf8');
+    var dirname = path.dirname(filename);
+      exports.blanket.instrument({
+        inputFile: content,
+        inputFileName: filename
+      },function(instrumented){
+          return eval(instrumented);
+        });
+  }else{
+    oldLoader(module,filename);
+  }
+};</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Parse source files</h2>
+						<p>We've bundled a copy of the Esprima JavaScript parser to generate parse trees for the source files, and a copy node-falafel to modify the parse trees.
+						</p>
+					</section>
+					<section>
+						<h2>Esprima JavaScript Parser</h2>
+						<blockquote>
+							Esprima is a high performance, standard-compliant ECMAScript parser written in ECMAScript<br>
+							...<br>
+							sensible syntax tree format, compatible with Mozilla Parser AST
+						</blockquote>
+						<a target="_blank" href="http://esprima.org">-Esprima.org</a>
+
+					</section>
+					<section>
+						<h2>Parse Tree Example</h2>
+						<pre><code contenteditable>
+// Life, Universe, and Everything
+var answer = 6 * 7;
+						</code></pre>
+						<a  target="_blank" href="http://esprima.org">From Esprima.org</a>
+
+					</section>
+					<section>
+						<h2>Parse Tree Example</h2>
+						<pre><code contenteditable>{ "type": "Program",
+    "body": [{
+      "type": "VariableDeclaration",
+      "declarations": [{
+        "type": "VariableDeclarator",
+        "id": {
+          "type": "Identifier",
+          "name": "answer"
+        },
+        "init": {
+          "type": "BinaryExpression",
+          "operator": "*",
+          "left": {
+            "type": "Literal",
+            "value": 6,
+            "raw": "6"
+          },
+          "right": {
+            "type": "Literal",
+            "value": 7,
+            "raw": "7"
+          }
+        }
+      }],
+      "kind": "var"
+    }]
+}</code></pre>
+						<a target="_blank" href="http://esprima.org">From Esprima.org</a>
+
+					</section>
+					<section>
+						<h2>node-falafel</h2>
+						<p>A lightweight node library to modify the parse tree.</p>
+						
+
+					</section>
+					<section>
+						<h2>node-falafel</h2>
+					
+						<pre><code contenteditable>
+var src = '(' + function () {
+    var xs = [ 1, 2, [ 3, 4 ] ];
+    var ys = [ 5, 6 ];
+    console.dir([ xs, ys ]);
+} + ')()';
+
+var output = falafel(src, function (node) {
+    if (node.type === 'ArrayExpression') {
+        node.update('fn(' + node.source() + ')');
+    }
+});
+console.log(output);</code></pre>
+<a  target="_blank" href="https://github.com/substack/node-falafel">From Substack/node-falafel</a>
+					</section>
+					<section>
+						<h2>node-falafel</h2>
+					
+						<pre><code contenteditable>
+(function () {
+    var xs = fn([ 1, 2, fn([ 3, 4 ]) ]);
+    var ys = fn([ 5, 6 ]);
+    console.dir(fn([ xs, ys ]));
+})()</code></pre>
+					</section>
+					<section>
+						<h2>blanket instrumentation</h2>
+					
+						<pre><code contenteditable>
+blanket = {
+  instrument: function(config, next){
+    var inFile = config.inputFile;
+    instrumented =  falafel(inFile,{loc:true}, checkForOneLiner);
+    next(instrumented)
+};</code></pre>
+					</section>
+					<section>
+						<h2>blanket instrumentation</h2>
+					
+						<pre><code contenteditable>
+var checkForOneLiner = function (node) {
+  if (linesToAddTracking.indexOf(node.type) > -1){
+    node.update(
+      "_$blanket['"+inFileName+"']["+node.loc.start.line+"]++;\n"
+         +node.source());
+  }
+};
+/* which creates the following:  */
+ _$blanket['test.js'][2]++;
+</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Output Details</h2>
+						<p>We store all the coverage details in a global variable _$blanket.<br>
+							When the test runner is finished we pass that variable to the appropriate reporter</p>
+					</section>
+					<section>
+						<h2>QUnit</h2>
+						<p>We wrote code to append the data from the coverage variable onto the end of the test runner file.</p>
+						<h2>Mocha</h2>
+						<p>We assign _$blanket to _$jscoverage and then use the built-in mocha reporters to output to json or HTML.</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Demo</h2>
+						<p>
+							This example can be seen on the <a target="_blank" href="http://migrii.github.com/blanket/">Blanket.js website</a>.  
+
+							We took the unit tests for Addy Osmani's Backbone Koans and added Blanket.js to the testrunner.
+						</p>
+					</section>
+					<section>
+						<h2>Existing Backbone Koans Test Runner</h2>
+						<pre><code contenteditable>
+&lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
+...
+&lt;script src="js/koans/aboutEvents.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutModels.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutCollections.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutViews.js"&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutApps.js"&gt;&lt;/script&gt;
+...
+&lt;/head&gt;&lt;body&gt;
+  &lt;h1&gt;Backbone Koans&lt;/h1&gt;
+  &lt;h1 id="qunit-header"&gt;QUnit Test Suite&lt;/h1&gt; 
+  ...</code></pre>
+					</section>
+					<section>
+						<h2>Traditional JS Code Coverage</h2>
+						<ul>
+							<li>We would need to install JSCoverage as an executable. </li>
+							<li>Need to run a command line to instrument our files </li>  
+							<li>Change test runner to refer to instrumented files instead of original source files </li> 
+							<li>Run test runner inside JSCoverage frame </li> 
+						</ul>
+					</section>
+					<section>
+						<h2>Backbone Koans Test Runner with Traditional JS Code Coverage</h2>
+						<pre><code contenteditable>
+&lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
+
+...
+&lt;script <b>src="js-cov/koans/aboutEvents.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutModels.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutCollections.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutViews.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutApps.js"</b> >&gt;&lt;/script&gt;
+...
+&lt;/head&gt;&lt;body&gt;
+  &lt;h1&gt;Backbone Koans&lt;/h1&gt;
+  &lt;h1 id="qunit-header"&gt;QUnit Test Suite&lt;/h1&gt; 
+  ...</code></pre>
+					</section>
+					<section>
+						<h2>Blanket.js Code Coverage</h2>
+						<ul>
+							<li>Download Blanket.js, or reference it from a CDN </li>
+							<li>Add data-cover attribute to scripts </li>  
+							<li>Coverage can easily be disabled by removing the reference to blanket.js </li> 
+							<li>Run test runner as usual </li> 
+						</ul>
+					</section>
+					<section>
+						<h2>Backbone Koans Test Runner with Blanket.js</h2>
+						<pre><code contenteditable>
+&lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
+<b>&lt;script src="blanket.js"&gt;&lt;/script&gt;</b>
+...
+&lt;script src="js/koans/aboutEvents.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutModels.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutCollections.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutViews.js" <b>data-cover</b>&gt;&lt;/script&gt;
+&lt;script src="js/koans/aboutApps.js" <b>data-cover</b>&gt;&lt;/script&gt;
+...
+&lt;/head&gt;&lt;body&gt;
+  &lt;h1&gt;Backbone Koans&lt;/h1&gt;
+  &lt;h1 id="qunit-header"&gt;QUnit Test Suite&lt;/h1&gt; 
+  ...</code></pre>
+					</section>
+					<section>
+						<h2>Just show the demo already!</h2>
+						<p>
+							Ok, here it is: <a target="_blank" href="http://migrii.github.com/blanket/examples/backbone-koans-qunit/index.html">Blanket.js Demo</a>.  
+
+							
+						</p>
+					</section>
+
+					<section>
+						<h2>What about the Node Demo!?</h2>
+						<p>
+						I don't have one prepared yet, but this is the process for coverage with node.
+						
+
+							
+						</p>
+					</section>
+					<section>
+						<h2>Traditional NodeJS Code Coverage</h2>
+						<ul>
+							<li>Clone node-jscoverage repo and build with make (requires gcc) </li>
+							<li>Need to run a command line to instrument our files </li>  
+							<li>Change testrunner/test files to refer to instrumented files instead of original source files <pre><code>require("src-cov/src1")</code></pre> </li> 
+							<li>Run test runner with mocha </li> 
+						</ul>
+					</section>
+					<section>
+						<h2>Blanket NodeJS Code Coverage</h2>
+						<ul>
+							<li>Install from NPM: <pre><code contenteditable>npm install blanket</code></pre></li>
+							<li>Add the following code to the test runner:
+								<pre><code contenteditable>require("blanket")("/src/");</code></pre>
+							</li>
+							<li>Run mocha as usual:
+								<pre><code contenteditable>mocha -R html-cov > coverage.html</code></pre>
+							</li>
+						</ul>
+					</section>
+					
+				</section>
+
+				<section>
+					<section>
+						<h2>Travis-CI &amp; Blanket.js</h2>
+						<p>
+							We mentioned continuous integration servers earlier.  
+							<br>Blanket.js official supports Travis-CI at this time.
+						</p>
+					</section>
+					<section>
+						<h2>Travis-CI</h2>
+						<p>
+							<blockquote>A hosted continuous integration service for the open source community.</blockquote>
+							<a target="_blank" href="http://travis-ci.org">From travis-ci.org</a>
+							<br><br>
+							A free (!) continuous integration server instance for open source projects, and it's hooked right in to GitHub (Admin->Hooks).
+						</p>
+					</section>
+					<section>
+						<h2>Travis-CI</h2>
+						<p>
+							<blockquote>For projects using NPM, Travis CI will execute<br>
+								<pre><code contenteditable>npm test</code></pre></blockquote>
+							<a target="_blank" href="http://about.travis-ci.org/docs/user/languages/javascript-with-nodejs/">From about.travis-ci.org, Building a Node.js project</a>
+						</p>
+					</section>
+					<section>
+						<h2>travis-cov</h2>
+						<ul>
+							<li>Mocha reporter designed to check if coverage data is below threshold</li>
+							<li>Easy to configure, just add the threshold value into your package.json<br>
+								<pre><code contenteditable>scripts: {
+  "travis-cov": {
+    threshold: 75
+  }
+}</code></pre></li>
+							<li>Easy to use, works just like any mocha reporter:<br>
+								<code><pre contenteditable>mocha -R travis-cov</code></pre></li>
+						</ul>
+					</section>
+					<section>
+						<h2>travis-cov &amp; blanket.js</h2>
+						<p>
+							Blanket.js default test is:<br>
+							<pre><code contenteditable>mocha -R travis-cov test-node/testrunner.js &amp;&amp; phantomjs phantom_runner.js test/testrunner.js</code></pre><br>
+							If any Pull request drops the coverage below the threshold the build will fail.  <br><br>GitHub allows us to see the result of the travis-ci build before merging the Pull Request (!).
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<h2>Future of Blanket.js</h2>
+					<ul>
+						<li>Jasmine compatibility and API for other test runners</li>
+						<li>Better, more detailed reporters</li>
+						<li>Running with the jQuery test suite</li>
+						<li><i>&lt;delusion of gradeur&gt;</i><br>Becoming the "official" code coverage tool of jQuery???<br><i>&lt;/delusion of gradeur&gt;</i></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>How to help</h2>
+					<ul>
+						<li>Download the project and use it</li>
+						<li>Submit issues, corrections, suggestions</li>
+						<li>Fork the repo on GitHub and submit Pull Requests</li>
+						<li>Spread the word!</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h1>Questions?</h1>
+						<br>
+						<p><a href="https://github.com/Migrii/blanket">Migrii/blanket</p>
+					<p><a href="http://www.twitter.com/alex_seville">@alex_seville</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				mouseWheel: false,
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
