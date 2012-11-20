@@ -43,7 +43,7 @@
 					</p>
 				</section>
 				<section>
-					<h2>Who am I</h2>
+					<h2>Who am I?</h2>
 					<ul>
 						<li>Developer at Nurun</li>
 						<li>Co-Founder of Migrii</li>
@@ -68,6 +68,8 @@ It is beyond the proof-of-concept stage, but is still NOT stable.<br>  Use at yo
 							<li>Existing approaches for frontend code coverage</li>
 							<li>Blanket.js approach</li>
 							<li>Demo of Blanket.js!</li>
+							<li>Travis-CI &amp; Blanket.js</li>
+							<li>The future of Blanket.js</li>
 						</ul>
 					</p>
 
@@ -408,6 +410,41 @@ var checkForOneLiner = function (node) {
   ...</code></pre>
 					</section>
 					<section>
+						<h2>Traditional JS Code Coverage</h2>
+						<ul>
+							<li>We would need to install JSCoverage as an executable. </li>
+							<li>Need to run a command line to instrument our files </li>  
+							<li>Change test runner to refer to instrumented files instead of original source files </li> 
+							<li>Run test runner inside JSCoverage frame </li> 
+						</ul>
+					</section>
+					<section>
+						<h2>Backbone Koans Test Runner with Traditional JS Code Coverage</h2>
+						<pre><code contenteditable>
+&lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
+
+...
+&lt;script <b>src="js-cov/koans/aboutEvents.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutModels.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutCollections.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutViews.js"</b> &gt;&lt;/script&gt;
+&lt;script <b>src="js-cov/koans/aboutApps.js"</b> >&gt;&lt;/script&gt;
+...
+&lt;/head&gt;&lt;body&gt;
+  &lt;h1&gt;Backbone Koans&lt;/h1&gt;
+  &lt;h1 id="qunit-header"&gt;QUnit Test Suite&lt;/h1&gt; 
+  ...</code></pre>
+					</section>
+					<section>
+						<h2>Blanket.js Code Coverage</h2>
+						<ul>
+							<li>Download Blanket.js, or reference it from a CDN </li>
+							<li>Add data-cover attribute to scripts </li>  
+							<li>Coverage can easily be disabled by removing the reference to blanket.js </li> 
+							<li>Run test runner as usual </li> 
+						</ul>
+					</section>
+					<section>
 						<h2>Backbone Koans Test Runner with Blanket.js</h2>
 						<pre><code contenteditable>
 &lt;script src="js/ext/qunit.js"&gt;&lt;/script&gt;
@@ -432,12 +469,28 @@ var checkForOneLiner = function (node) {
 							
 						</p>
 					</section>
+
 					<section>
 						<h2>What about the Node Demo!?</h2>
 						<p>
-						I don't have one prepared yet, but this is what you need to do to run it with Node.
-<br><br>						
-<ul>
+						I don't have one prepared yet, but this is the process for coverage with node.
+						
+
+							
+						</p>
+					</section>
+					<section>
+						<h2>Traditional NodeJS Code Coverage</h2>
+						<ul>
+							<li>Clone node-jscoverage repo and build with make (requires gcc) </li>
+							<li>Need to run a command line to instrument our files </li>  
+							<li>Change testrunner/test files to refer to instrumented files instead of original source files <pre><code>require("src-cov/src1")</code></pre> </li> 
+							<li>Run test runner with mocha </li> 
+						</ul>
+					</section>
+					<section>
+						<h2>Blanket NodeJS Code Coverage</h2>
+						<ul>
 							<li>Install from NPM: <pre><code contenteditable>npm install blanket</code></pre></li>
 							<li>Add the following code to the test runner:
 								<pre><code contenteditable>require("blanket")("/src/");</code></pre>
@@ -446,18 +499,66 @@ var checkForOneLiner = function (node) {
 								<pre><code contenteditable>mocha -R html-cov > coverage.html</code></pre>
 							</li>
 						</ul>
+					</section>
+					
+				</section>
+
+				<section>
+					<section>
+						<h2>Travis-CI &amp; Blanket.js</h2>
+						<p>
+							We mentioned continuous integration servers earlier.  
+							<br>Blanket.js official supports Travis-CI at this time.
+						</p>
+					</section>
+					<section>
+						<h2>Travis-CI</h2>
+						<p>
+							<blockquote>A hosted continuous integration service for the open source community.</blockquote>
+							<a target="_blank" href="http://travis-ci.org">From travis-ci.org</a>
+							<br><br>
+							A free (!) continuous integration server instance for open source projects, and it's hooked right in to GitHub (Admin->Hooks).
+						</p>
+					</section>
+					<section>
+						<h2>Travis-CI</h2>
+						<p>
+							<blockquote>For projects using NPM, Travis CI will execute<br>
+								<pre><code contenteditable>npm test</code></pre></blockquote>
+							<a target="_blank" href="http://about.travis-ci.org/docs/user/languages/javascript-with-nodejs/">From about.travis-ci.org, Building a Node.js project</a>
+						</p>
+					</section>
+					<section>
+						<h2>travis-cov</h2>
+						<ul>
+							<li>Mocha reporter designed to check if coverage data is below threshold</li>
+							<li>Easy to configure, just add the threshold value into your package.json<br>
+								<pre><code contenteditable>scripts: {
+  "travis-cov": {
+    threshold: 75
+  }
+}</code></pre></li>
+							<li>Easy to use, works just like any mocha reporter:<br>
+								<code><pre contenteditable>mocha -R travis-cov</code></pre></li>
+						</ul>
+					</section>
+					<section>
+						<h2>travis-cov &amp; blanket.js</h2>
+						<p>
+							Blanket.js default test is:<br>
+							<pre><code contenteditable>mocha -R travis-cov test-node/testrunner.js &amp;&amp; phantomjs phantom_runner.js test/testrunner.js</code></pre><br>
+							If any Pull request drops the coverage below the threshold the build will fail.  <br><br>GitHub allows us to see the result of the travis-ci build before merging the Pull Request (!).
 						</p>
 					</section>
 				</section>
 
 				<section>
-					<h2>Next steps</h2>
+					<h2>Future of Blanket.js</h2>
 					<ul>
-						<li>Tests, tests, tests, need to eat more of our own dogfood</li>
 						<li>Jasmine compatibility and API for other test runners</li>
-						<li>Integration with CI</li>
+						<li>Better, more detailed reporters</li>
 						<li>Running with the jQuery test suite</li>
-						<li>Becoming the "official" code coverage tool of jQuery???</li>
+						<li><i>&lt;delusion of gradeur&gt;</i><br>Becoming the "official" code coverage tool of jQuery???<br><i>&lt;/delusion of gradeur&gt;</i></li>
 					</ul>
 				</section>
 
@@ -474,6 +575,7 @@ var checkForOneLiner = function (node) {
 				<section>
 					<h1>Questions?</h1>
 						<br>
+						<p><a href="https://github.com/Migrii/blanket">Migrii/blanket</p>
 					<p><a href="http://www.twitter.com/alex_seville">@alex_seville</p>
 				</section>
 
